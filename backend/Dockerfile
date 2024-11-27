@@ -17,5 +17,6 @@ COPY backend/ /app
 RUN ls -al /app
 RUN pip install --no-cache-dir -r requirements.txt
 
+RUN python manage.py collectstatic --no-input
 # Expose port 8000 for the Django app
 EXPOSE 8000
