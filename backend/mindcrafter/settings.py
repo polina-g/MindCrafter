@@ -11,16 +11,24 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import os
+import sys
+import environ
+
+env = environ.Env(DEBUG=(int, 0))
+# reading .env file
+environ.Env.read_env(".env")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+TMP_DIR = "/tmp"
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-0y9vs6!%v%^s!+alfu)pahuzi*gx656)cc+ml3o95z@yl@m2jg'
+SECRET_KEY = env.str("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -73,12 +81,28 @@ WSGI_APPLICATION = 'mindcrafter.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if "test" in sys.argv:
+    TEST_MODE = True
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "TEST": {
+                "NAME": os.path.join(TMP_DIR, "db.test.sqlite3"),
+            },
+        }
     }
-}
+else:
+    TEST_MODE = False
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": env.str("DJANGO_DB_NAME", default="unsafe"),
+            "USER": env.str("DJANGO_DB_USER", default="unsafe"),
+            "PASSWORD": env.str("DJANGO_DB_PASSWORD", default="unsafe"),
+            "HOST": env.str("DJANGO_DB_HOST", default="unsafe"),
+            "PORT": env.int("DJANGO_DB_PORT", default=5432),
+        }
+    }
 
 
 # Password validation
