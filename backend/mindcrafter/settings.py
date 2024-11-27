@@ -28,7 +28,7 @@ TMP_DIR = "/tmp"
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env.str("DJANGO_SECRET_KEY")
+SECRET_KEY = env.str("DJANGO_SECRET_KEY", default="django-insecure-0y9vs6!%v%^s!+alfu)pahuzi*gx656)cc+ml3o95z@yl@m2jg",)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -96,10 +96,10 @@ else:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",
-            "NAME": env.str("DJANGO_DB_NAME", default="unsafe"),
-            "USER": env.str("DJANGO_DB_USER", default="unsafe"),
-            "PASSWORD": env.str("DJANGO_DB_PASSWORD", default="unsafe"),
-            "HOST": env.str("DJANGO_DB_HOST", default="unsafe"),
+            "NAME": env.str("DJANGO_DB_NAME", default="postgres"),
+            "USER": env.str("DJANGO_DB_USER", default="postgres"),
+            "PASSWORD": env.str("DJANGO_DB_PASSWORD", default="postgres"),
+            "HOST": env.str("DJANGO_DB_HOST", default="db"),
             "PORT": env.int("DJANGO_DB_PORT", default=5432),
         }
     }
