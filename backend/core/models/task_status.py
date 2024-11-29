@@ -1,5 +1,3 @@
-from django.db import models
-
 from core.models.fields import StringField
 from core.models.mixins import TimeStampMixin
 from colorfield.fields import ColorField
